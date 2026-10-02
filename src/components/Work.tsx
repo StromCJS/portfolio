@@ -1,17 +1,37 @@
-import { useState, useCallback } from "react";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { MdArrowOutward } from "react-icons/md";
 import "./styles/Work.css";
-import WorkImage from "./WorkImage";
-import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
-const projects = [
+gsap.registerPlugin(ScrollTrigger);
+
+type Project = {
+  title: string;
+  category: string;
+  tools: string;
+  image: string;
+  summary?: string;
+  link?: string;
+};
+
+const projects: Project[] = [
   {
-    title: "ELEGANCE",
+    title: "KES Attendance Portal",
+    category: "School Staff Attendance & Payroll",
+    summary:
+      "The staff attendance system in daily use at Kadambur English Medium School. Three interfaces over one record — an administrator console, a staff sign-in, and a door kiosk with face and fingerprint check-in. Runs entirely on the school's own computer: no cloud, no subscription, no internet needed.",
+    tools: "Node.js, Express, SQLite, Biometric check-in, Payroll",
+    image: "/images/kes-attendance.jpg",
+  },
+  {
+    title: "Elegance",
     category: "Low-Code Platform",
     tools: "Angular, Next.js, NestJS, MongoDB",
     image: "/images/ELEGANCE.png",
   },
   {
-    title: "PORTFOLIO",
+    title: "Portfolio",
     category: "E-Commerce",
     tools: "Angular, Next.js, NestJS, CMS",
     image: "/images/PORTFOLIO.png",
@@ -23,13 +43,13 @@ const projects = [
     image: "/images/my-card.png",
   },
   {
-    title: "LUXE",
+    title: "Luxe",
     category: "CRM Platform",
     tools: "AngularJS, NestJS, PostgreSQL",
     image: "/images/LUXE.png",
   },
   {
-    title: "SERENITY",
+    title: "Serenity",
     category: "Insurance Platform",
     tools: "React.js, Node.js, Microservices",
     image: "/images/SERENITY.png",
@@ -37,108 +57,125 @@ const projects = [
 ];
 
 const Work = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const pinRef = useRef<HTMLDivElement>(null);
+  const railRef = useRef<HTMLDivElement>(null);
+  const fillRef = useRef<HTMLDivElement>(null);
+  const counterRef = useRef<HTMLElement>(null);
 
-  const goToSlide = useCallback(
-    (index: number) => {
-      if (isAnimating) return;
-      setIsAnimating(true);
-      setCurrentIndex(index);
-      setTimeout(() => setIsAnimating(false), 500);
-    },
-    [isAnimating]
-  );
+  useEffect(() => {
+    const mm = gsap.matchMedia();
 
-  const goToPrev = useCallback(() => {
-    const newIndex =
-      currentIndex === 0 ? projects.length - 1 : currentIndex - 1;
-    goToSlide(newIndex);
-  }, [currentIndex, goToSlide]);
+    // horizontal rail only where there is room for it, and only if the
+    // visitor hasn't asked for reduced motion
+    mm.add(
+      "(min-width: 1025px) and (prefers-reduced-motion: no-preference)",
+      () => {
+        const rail = railRef.current;
+        const pin = pinRef.current;
+        if (!rail || !pin) return;
 
-  const goToNext = useCallback(() => {
-    const newIndex =
-      currentIndex === projects.length - 1 ? 0 : currentIndex + 1;
-    goToSlide(newIndex);
-  }, [currentIndex, goToSlide]);
+        const distance = () => Math.max(0, rail.offsetWidth - window.innerWidth);
+
+        const tween = gsap.to(rail, {
+          x: () => -distance(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: pin,
+            start: "top top",
+            end: () => "+=" + distance(),
+            pin: true,
+            anticipatePin: 1,
+            scrub: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+              if (fillRef.current) {
+                gsap.set(fillRef.current, { scaleX: self.progress });
+              }
+              if (counterRef.current) {
+                const index = Math.min(
+                  projects.length,
+                  Math.floor(self.progress * projects.length) + 1
+                );
+                counterRef.current.textContent = String(index).padStart(2, "0");
+              }
+            },
+          },
+        });
+
+        return () => {
+          tween.scrollTrigger?.kill();
+          tween.kill();
+        };
+      }
+    );
+
+    return () => mm.revert();
+  }, []);
 
   return (
-    <div className="work-section" id="work">
-      <div className="work-container section-container">
-        <h2>
-          My <span>Work</span>
-        </h2>
-
-        <div className="carousel-wrapper">
-          {/* Navigation Arrows */}
-          <button
-            className="carousel-arrow carousel-arrow-left"
-            onClick={goToPrev}
-            aria-label="Previous project"
-            data-cursor="disable"
-          >
-            <MdArrowBack />
-          </button>
-          <button
-            className="carousel-arrow carousel-arrow-right"
-            onClick={goToNext}
-            aria-label="Next project"
-            data-cursor="disable"
-          >
-            <MdArrowForward />
-          </button>
-
-          {/* Slides */}
-          <div className="carousel-track-container">
-            <div
-              className="carousel-track"
-              style={{
-                transform: `translateX(-${currentIndex * 100}%)`,
-              }}
-            >
-              {projects.map((project, index) => (
-                <div className="carousel-slide" key={index}>
-                  <div className="carousel-content">
-                    <div className="carousel-info">
-                      <div className="carousel-number">
-                        <h3>0{index + 1}</h3>
-                      </div>
-                      <div className="carousel-details">
-                        <h4>{project.title}</h4>
-                        <p className="carousel-category">
-                          {project.category}
-                        </p>
-                        <div className="carousel-tools">
-                          <span className="tools-label">Tools & Features</span>
-                          <p>{project.tools}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="carousel-image-wrapper">
-                      <WorkImage image={project.image} alt={project.title} />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Dot Indicators */}
-          <div className="carousel-dots">
-            {projects.map((_, index) => (
-              <button
-                key={index}
-                className={`carousel-dot ${index === currentIndex ? "carousel-dot-active" : ""
-                  }`}
-                onClick={() => goToSlide(index)}
-                aria-label={`Go to project ${index + 1}`}
-                data-cursor="disable"
-              />
-            ))}
-          </div>
+    <section className="work-section" id="work">
+      <div className="section-shell">
+        <div className="section-head">
+          <h2 className="section-title title">
+            Selected
+            <br />
+            <span className="outline">Work</span>
+          </h2>
+          <span className="section-index">04 — Projects</span>
         </div>
       </div>
-    </div>
+
+      <div className="work-pin" ref={pinRef}>
+        <div className="work-rail" ref={railRef}>
+          {projects.map((project, index) => (
+            <article className="wp" key={project.title}>
+              <div className="wp-body">
+                <div className="wp-num">{String(index + 1).padStart(2, "0")}</div>
+                <h3 className="wp-title">{project.title}</h3>
+                <p className="wp-category">{project.category}</p>
+                {project.summary && (
+                  <p className="wp-summary">{project.summary}</p>
+                )}
+                <dl className="wp-tools">
+                  <dt>Tools &amp; features</dt>
+                  <dd>{project.tools}</dd>
+                </dl>
+              </div>
+
+              <div className="wp-media">
+                <img
+                  src={project.image}
+                  alt={`${project.title} — ${project.category}`}
+                  loading="lazy"
+                />
+                {project.link && (
+                  <a
+                    className="wp-link"
+                    href={project.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-cursor="disable"
+                    aria-label={`Open ${project.title}`}
+                  >
+                    <MdArrowOutward />
+                  </a>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div className="work-meter">
+          <span className="work-counter">
+            <b ref={counterRef}>01</b> / {String(projects.length).padStart(2, "0")}
+          </span>
+          <div className="work-meter-track">
+            <div className="work-meter-fill" ref={fillRef}></div>
+          </div>
+          <span className="label">Scroll to advance</span>
+        </div>
+      </div>
+    </section>
   );
 };
 

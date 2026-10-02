@@ -1,82 +1,90 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300..700&display=swap");
 
+/* ==========================================================================
+   ACID MONOCHROME — design tokens
+   Neutral grey scale + one acid accent, used sparingly.
+   ========================================================================== */
 :root {
-  font-family: "Geist", sans-serif;
+  /* surfaces: elevation by lightness, never by shadow */
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --surface-2: #171717;
+  --surface-3: #1f1f1f;
 
+  /* borders are translucent white, never solid grey */
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.22);
+
+  /* tiered text — flat full-brightness text is the amateur giveaway */
+  --text: rgba(255, 255, 255, 0.92);
+  --text-2: #a3a3a3;
+  --text-3: #6e6e6e;
+
+  --acid: #ccff00;
+  --acid-dim: #9cc400;
+
+  --font-display: "Anton", "Arial Narrow", Impact, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+
+  /* fluid type scale */
+  --fs-hero: clamp(4rem, 15.5vw, 15rem);
+  --fs-section: clamp(2.5rem, 9vw, 8rem);
+  --fs-statement: clamp(1.5rem, 3.4vw, 2.9rem);
+  --fs-body: clamp(0.95rem, 1.05vw, 1.0625rem);
+  --fs-label: 0.6875rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-io: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --vh: 100vh;
+  --vh: 100svh;
+
+  font-family: var(--font-sans);
   font-optical-sizing: auto;
-  font-style: normal;
   line-height: 1.5;
-  scroll-behavior: smooth;
-  color-scheme: light dark;
-  color: #eae5ec;
-  background-color: var(--backgroundColor);
+  color: var(--text);
+  background-color: var(--bg);
+  color-scheme: dark;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  --accentColor: #5eead4;
-  --backgroundColor: #0a0e17;
-  --vh: 100vh;
-  --vh: 100svh;
+  -webkit-text-size-adjust: 100%;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Geist", sans-serif;
+* {
+  box-sizing: border-box;
 }
 
 body {
-  overflow: hidden;
+  margin: 0;
+  background-color: var(--bg);
+  overflow: hidden; /* released by initialFX once the loader finishes */
+  max-width: 100vw;
+  overflow-x: hidden;
+  --cw: min(1400px, 92vw);
+  --gutter: clamp(1rem, 4vw, 2.5rem);
 }
 
-a {
-  color: inherit;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: var(--accentColor);
+.main-body {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 main {
   opacity: 1;
   transition: 0.3s;
 }
-
 .main-active {
   opacity: 0;
   animation: fadeIn 1s 1;
   animation-fill-mode: forwards;
 }
-
 @keyframes fadeIn {
   100% {
     opacity: 1;
   }
-}
-
-body {
-  margin: 0;
-  height: auto;
-  background-color: #050810;
-  flex-grow: 1;
-  --cWidth: calc(100% - 30px);
-  --cMaxWidth: 1920px;
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-.main-body {
-  max-width: 100vw;
-  overflow-x: hidden;
 }
 
 .container-main {
@@ -85,17 +93,125 @@ body {
   position: relative;
 }
 
-.container1 {
-  width: var(--cWidth);
-  height: var(--vh);
-  margin: auto;
+/* ---------- typography primitives ---------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 400;
+}
+
+.display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.015em;
+  line-height: 0.86;
+  font-weight: 400;
+}
+
+/* acid-outlined type — the one place colour gets loud */
+.outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--acid);
+  text-stroke: 1.5px var(--acid);
+}
+@media (max-width: 700px) {
+  .outline {
+    -webkit-text-stroke-width: 1px;
+  }
+}
+
+.label {
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  line-height: 1;
+}
+
+.label-acid {
+  color: var(--acid);
+}
+
+.section-shell {
+  width: var(--cw);
+  margin-inline: auto;
   position: relative;
 }
 
+/* section heading: huge condensed type with a hairline rule */
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-block: clamp(4rem, 10vh, 9rem) 2.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.section-title {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: var(--fs-section);
+  line-height: 0.84;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.section-index {
+  font-family: var(--font-sans);
+  font-size: var(--fs-label);
+  letter-spacing: 0.18em;
+  color: var(--text-3);
+  white-space: nowrap;
+  padding-bottom: 0.65rem;
+}
+
+/* clip-path wipe: the signature reveal. JS animates the inset to 0. */
+.wipe {
+  clip-path: inset(0 0 0 0);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--acid);
+  color: #0a0a0a;
+}
+
+/* ---------- fixed acid scroll-progress rail ---------- */
+.scroll-rail {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  z-index: 200;
+  background: var(--line);
+  pointer-events: none;
+}
+.scroll-rail-in {
+  height: 100%;
+  width: 100%;
+  background: var(--acid);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+/* ---------- split-text helpers ---------- */
 .split-line {
   overflow: hidden;
 }
-
 .split-h2 {
   overflow: hidden;
   display: flex;
@@ -103,35 +219,16 @@ body {
   flex-wrap: nowrap;
 }
 
-.techstack {
-  width: 100%;
-  position: relative;
-  overflow: clip;
-  height: var(--vh);
-  margin: auto;
-  margin-top: 50px;
-  margin-bottom: -100px;
-}
-
-.techstack h2 {
-  font-size: 80px;
-  text-align: center;
-  position: absolute;
-  width: 100%;
-  top: 120px;
-  left: 0;
-  font-weight: 400;
-  text-transform: uppercase;
-}
-
-@media screen and (min-width: 768px) {
-  body {
-    --cWidth: 94%;
+/* ---------- reduced motion: strip every scrub, keep the design ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
-}
-
-@media screen and (max-width: 900px) {
-  .techstack h2 {
-    font-size: 40px;
+  .scroll-rail {
+    display: none;
   }
 }

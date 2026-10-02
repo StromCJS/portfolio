@@ -1,0 +1,43 @@
+.techstack {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(3rem, 9vh, 6.5rem);
+  border-block: 1px solid var(--line);
+  margin-block: clamp(3rem, 9vh, 6rem);
+}
+
+.tech-label {
+  width: var(--cw);
+  margin: 0 auto clamp(1.5rem, 4vh, 2.5rem);
+}
+
+.tech-row {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  will-change: transform;
+}
+.tech-row + .tech-row {
+  margin-top: clamp(0.25rem, 1.5vh, 0.75rem);
+}
+
+.tech-item {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: clamp(2.25rem, 6.5vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  padding-inline: 0.35em;
+  color: var(--text);
+  white-space: nowrap;
+}
+/* alternate solid / acid-outline for rhythm */
+.tech-row--alt .tech-item {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--acid);
+}
+.tech-sep {
+  color: var(--text-3);
+  font-size: clamp(1rem, 2vw, 1.75rem);
+  padding-inline: 0.2em;
+}

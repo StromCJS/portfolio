@@ -28,3 +28,6 @@ backup/
 .env
 .vercel
 .env*.local
+
+# TypeScript incremental build cache
+*.tsbuildinfo

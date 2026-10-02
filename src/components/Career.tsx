@@ -1,77 +1,71 @@
 import "./styles/Career.css";
 
+const timeline = [
+  {
+    step: "01",
+    role: "Bachelor of Computer Applications",
+    org: "University of Bangalore",
+    when: "2021 — 2024",
+    desc: "Completed my BCA at SB College of Management Studies. Built a strong foundation in computer science and programming, and completed hands-on cloud computing training with AWS, Azure and Google Cloud.",
+  },
+  {
+    step: "02",
+    role: "Full Stack Trainee (MERN)",
+    org: "Entri Elevate & Illinois Tech US",
+    when: "2024 — 2025",
+    desc: "Engineered backend services and APIs using Node.js and MongoDB. Implemented version control and API testing workflows with Git and Postman while mastering responsive web design.",
+  },
+  {
+    step: "03",
+    role: "Full-Stack Project — CricTrackerPro",
+    org: "Independent",
+    when: "2025",
+    desc: "Developed a live cricket score application delivering real-time match updates through third-party sports APIs. Built the UI with React.js and Tailwind, secured it with Firebase, and handled database operations with Node.js and MongoDB.",
+  },
+  {
+    step: "04",
+    role: "IT Administrator",
+    org: "Kadambur English Medium School",
+    when: "Now",
+    now: true,
+    desc: "Managing and maintaining the school's IT infrastructure, providing technical support and keeping daily technological operations running. Also designed and built the school's staff attendance portal — now its system of record for attendance, leave, cover and payroll.",
+  },
+];
+
 const Career = () => {
   return (
-    <div className="career-section section-container">
-      <div className="career-container">
-        <h2>
-          My career <span>&</span>
-          <br /> experience
+    <section className="career-section section-container">
+      <div className="section-head">
+        <h2 className="section-title title">
+          Career <span className="outline">&amp;</span>
+          <br />
+          Experience
         </h2>
-        <div className="career-info">
-          <div className="career-timeline">
-            <div className="career-dot"></div>
-          </div>
-
-          {/* Education Block */}
-          <div className="career-info-box">
-            <div className="career-info-in">
-              <div className="career-role">
-                <h4>Bachelor of Computer Applications</h4>
-                <h5>University of Bangalore</h5>
-              </div>
-              <h3>2021 - 2024</h3>
-            </div>
-            <p>
-              Completed my BCA at SB College of Management Studies. Built a strong foundation in computer science, programming, and completed hands-on cloud computing training with AWS, Azure, and Google Cloud.
-            </p>
-          </div>
-
-          {/* Training Block */}
-          <div className="career-info-box">
-            <div className="career-info-in">
-              <div className="career-role">
-                <h4>Full Stack Trainee (MERN)</h4>
-                <h5>Entri Elevate & Illinois Tech US</h5>
-              </div>
-              <h3>2024 - 2025</h3>
-            </div>
-            <p>
-              Engineered backend services and APIs utilizing Node.js and MongoDB. Implemented version control and API testing workflows with Git and Postman while mastering responsive web design.
-            </p>
-          </div>
-
-          {/* Project Block */}
-          <div className="career-info-box">
-            <div className="career-info-in">
-              <div className="career-role">
-                <h4>Full-Stack Project</h4>
-                <h5>CricTrackerPro</h5>
-              </div>
-              <h3>2025</h3>
-            </div>
-            <p>
-              Developed a live cricket score application delivering real-time match updates using third-party sports APIs. Built dynamic UI with React.js and Tailwind, secured with Firebase, and managed database operations with Node.js and MongoDB.
-            </p>
-          </div>
-
-          {/* Current Role Block */}
-          <div className="career-info-box">
-            <div className="career-info-in">
-              <div className="career-role">
-                <h4>IT Administrator</h4>
-                <h5>Kadambur English Medium School</h5>
-              </div>
-              <h3>NOW</h3>
-            </div>
-            <p>
-              Managing and maintaining the school's IT infrastructure. Providing technical support, troubleshooting hardware and software issues, and ensuring smooth daily technological operations for the past 7 months.
-            </p>
-          </div>
-
-        </div>
+        <span className="section-index">03 — Timeline</span>
       </div>
-    </div>
+
+      <div className="career-info">
+        <div className="career-timeline">
+          <div className="career-timeline-fill"></div>
+        </div>
+
+        {timeline.map((item) => (
+          <article className="career-info-box" key={item.step}>
+            <div className="career-step">{item.step}</div>
+            <div>
+              <div className="career-role">
+                <h4>{item.role}</h4>
+                <h5>{item.org}</h5>
+              </div>
+              <p>{item.desc}</p>
+            </div>
+            <div className="career-when" data-now={item.now ? "true" : "false"}>
+              {item.when}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 };
 

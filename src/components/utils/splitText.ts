@@ -1,80 +1,67 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
-import { SplitText } from "gsap-trial/SplitText";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { SplitText } from "gsap/SplitText";
 
-interface ParaElement extends HTMLElement {
+interface SplitElement extends HTMLElement {
   anim?: gsap.core.Animation;
   split?: SplitText;
 }
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
 
+/**
+ * Reveal pass for the two text roles in the design:
+ *   .title — Anton headings, wiped up line by line behind a mask
+ *   .para  — body copy, words masked up with a short stagger
+ * Nothing is hidden in CSS, so if this never runs the content still reads.
+ */
 export default function setSplitText() {
   ScrollTrigger.config({ ignoreMobileResize: true });
-  if (window.innerWidth < 900) return;
-  const paras: NodeListOf<ParaElement> = document.querySelectorAll(".para");
-  const titles: NodeListOf<ParaElement> = document.querySelectorAll(".title");
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  const TriggerStart = window.innerWidth <= 1024 ? "top 60%" : "20% 60%";
-  const ToggleAction = "play pause resume reverse";
+  const start = window.innerWidth <= 1024 ? "top 85%" : "top 80%";
+  const toggleActions = "play none none reverse";
 
-  paras.forEach((para: ParaElement) => {
-    para.classList.add("visible");
-    if (para.anim) {
-      para.anim.progress(1).kill();
-      para.split?.revert();
-    }
+  const titles = document.querySelectorAll<SplitElement>(".title");
+  titles.forEach((title) => {
+    title.anim?.progress(1).kill();
+    title.split?.revert();
+
+    title.split = new SplitText(title, { type: "lines", mask: "lines" });
+    title.anim = gsap.fromTo(
+      title.split.lines,
+      { yPercent: 115 },
+      {
+        yPercent: 0,
+        duration: 1,
+        ease: "expo.out",
+        stagger: 0.08,
+        scrollTrigger: { trigger: title, start, toggleActions },
+      }
+    );
+  });
+
+  const paras = document.querySelectorAll<SplitElement>(".para");
+  paras.forEach((para) => {
+    para.anim?.progress(1).kill();
+    para.split?.revert();
 
     para.split = new SplitText(para, {
       type: "lines,words",
-      linesClass: "split-line",
+      mask: "lines",
     });
-
     para.anim = gsap.fromTo(
       para.split.words,
-      { autoAlpha: 0, y: 80 },
+      { yPercent: 110, opacity: 0 },
       {
-        autoAlpha: 1,
-        scrollTrigger: {
-          trigger: para.parentElement?.parentElement,
-          toggleActions: ToggleAction,
-          start: TriggerStart,
-        },
-        duration: 1,
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.9,
         ease: "power3.out",
-        y: 0,
-        stagger: 0.02,
+        stagger: 0.015,
+        scrollTrigger: { trigger: para, start, toggleActions },
       }
     );
   });
-  titles.forEach((title: ParaElement) => {
-    if (title.anim) {
-      title.anim.progress(1).kill();
-      title.split?.revert();
-    }
-    title.split = new SplitText(title, {
-      type: "chars,lines",
-      linesClass: "split-line",
-    });
-    title.anim = gsap.fromTo(
-      title.split.chars,
-      { autoAlpha: 0, y: 80, rotate: 10 },
-      {
-        autoAlpha: 1,
-        scrollTrigger: {
-          trigger: title.parentElement?.parentElement,
-          toggleActions: ToggleAction,
-          start: TriggerStart,
-        },
-        duration: 0.8,
-        ease: "power2.inOut",
-        y: 0,
-        rotate: 0,
-        stagger: 0.03,
-      }
-    );
-  });
-
-  ScrollTrigger.addEventListener("refresh", () => setSplitText());
 }
