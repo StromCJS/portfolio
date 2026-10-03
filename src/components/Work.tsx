@@ -28,31 +28,31 @@ const projects: Project[] = [
     title: "Elegance",
     category: "Low-Code Platform",
     tools: "Angular, Next.js, NestJS, MongoDB",
-    image: "/images/ELEGANCE.png",
+    image: "/images/ELEGANCE.webp",
   },
   {
     title: "Portfolio",
     category: "E-Commerce",
     tools: "Angular, Next.js, NestJS, CMS",
-    image: "/images/PORTFOLIO.png",
+    image: "/images/PORTFOLIO.webp",
   },
   {
     title: "Bond Cancellation",
     category: "Import-Export Automation",
     tools: "Angular, Next.js, NestJS, Workflows",
-    image: "/images/my-card.png",
+    image: "/images/my-card.webp",
   },
   {
     title: "Luxe",
     category: "CRM Platform",
     tools: "AngularJS, NestJS, PostgreSQL",
-    image: "/images/LUXE.png",
+    image: "/images/LUXE.webp",
   },
   {
     title: "Serenity",
     category: "Insurance Platform",
     tools: "React.js, Node.js, Microservices",
-    image: "/images/SERENITY.png",
+    image: "/images/SERENITY.webp",
   },
 ];
 
