@@ -24,11 +24,11 @@ const timeline = [
   },
   {
     step: "04",
-    role: "IT Administrator",
-    org: "Kadambur English Medium School",
-    when: "Now",
+    role: "IT Administrator & Website Developer",
+    org: "Kadambur English Medium School (CBSE)",
+    when: "2024 — Now",
     now: true,
-    desc: "Managing and maintaining the school's IT infrastructure, providing technical support and keeping daily technological operations running. Also designed and built the school's staff attendance portal — now its system of record for attendance, leave, cover and payroll.",
+    desc: "Built and maintain the school's official website, and administer its IT infrastructure, networking and day-to-day systems. Designed the staff attendance portal that is now its system of record for attendance, leave, cover and payroll — and run training programmes teaching staff and students Python and how to put AI tools to work in lesson planning and assessment.",
   },
 ];
 

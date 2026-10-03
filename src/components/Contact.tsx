@@ -43,10 +43,28 @@ const Contact = () => {
               sayanthunni116@gmail.com
             </a>
           </p>
+          <p>
+            <a href="tel:+918075841212" data-cursor="disable">
+              +91 80758 41212
+            </a>
+          </p>
         </div>
         <div className="contact-box">
-          <h4>Education</h4>
+          <h4>Based in</h4>
+          <p>Kannur, Kerala, India</p>
           <p>Bachelor of Computer Applications</p>
+        </div>
+        <div className="contact-box">
+          <h4>Résumé</h4>
+          <a
+            href="/Sayanth-V-Resume.pdf"
+            target="_blank"
+            rel="noreferrer"
+            data-cursor="disable"
+            className="contact-social"
+          >
+            Download PDF <MdArrowOutward />
+          </a>
         </div>
         <div className="contact-box">
           <h4>Social</h4>

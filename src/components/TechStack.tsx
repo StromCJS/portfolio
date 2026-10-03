@@ -6,17 +6,17 @@ import "./styles/TechStack.css";
 const rowA = [
   "React.js",
   "Next.js",
-  "Angular",
   "TypeScript",
   "Node.js",
-  "NestJS",
+  "Express.js",
+  "MongoDB",
 ];
 const rowB = [
-  "MongoDB",
   "PostgreSQL",
-  "Express.js",
   "Python",
-  "Material UI",
+  "Tailwind CSS",
+  "AWS",
+  "Docker",
   "Git",
 ];
 

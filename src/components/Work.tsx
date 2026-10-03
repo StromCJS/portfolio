@@ -25,34 +25,28 @@ const projects: Project[] = [
     image: "/images/kes-attendance.jpg",
   },
   {
+    title: "Serenity",
+    category: "Hotel Reservation Platform",
+    tools: "React, Node.js, Express, MongoDB",
+    image: "/images/SERENITY.webp",
+  },
+  {
+    title: "Luxe",
+    category: "E-Commerce Storefront",
+    tools: "React, Node.js, Express, MongoDB",
+    image: "/images/LUXE.webp",
+  },
+  {
     title: "Elegance",
-    category: "Low-Code Platform",
-    tools: "Angular, Next.js, NestJS, MongoDB",
+    category: "Salon Booking & Services",
+    tools: "React, Node.js, Express, MongoDB",
     image: "/images/ELEGANCE.webp",
   },
   {
     title: "Portfolio",
-    category: "E-Commerce",
-    tools: "Angular, Next.js, NestJS, CMS",
+    category: "Personal Site — Previous Build",
+    tools: "React, TypeScript, Tailwind CSS",
     image: "/images/PORTFOLIO.webp",
-  },
-  {
-    title: "Bond Cancellation",
-    category: "Import-Export Automation",
-    tools: "Angular, Next.js, NestJS, Workflows",
-    image: "/images/my-card.webp",
-  },
-  {
-    title: "Luxe",
-    category: "CRM Platform",
-    tools: "AngularJS, NestJS, PostgreSQL",
-    image: "/images/LUXE.webp",
-  },
-  {
-    title: "Serenity",
-    category: "Insurance Platform",
-    tools: "React.js, Node.js, Microservices",
-    image: "/images/SERENITY.webp",
   },
 ];
 

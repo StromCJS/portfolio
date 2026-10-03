@@ -18,28 +18,28 @@ const About = () => {
         </div>
         <div className="about-me">
           <p className="about-statement para">
-            Full Stack Developer with <b>1+ years</b> of experience building
-            scalable web applications using React.js, Angular, Next.js, Node.js
-            and NestJS. Skilled in <em>microservices architecture</em>,{" "}
-            <em>CMS development</em> and <em>low-code platforms</em> — focused on
-            shipping <b>high-performance, production-ready</b> solutions from
-            concept to deployment.
+            Full Stack Developer specialising in the <b>MERN stack</b> and{" "}
+            <b>TypeScript</b>, building responsive, end-to-end web applications
+            — <em>e-commerce platforms</em>, <em>booking systems</em> and{" "}
+            <em>AI-powered tools</em>. I design RESTful APIs, integrate
+            third-party services and deploy on <b>AWS, Azure and Google Cloud</b>
+            , taking work from concept to production.
           </p>
         </div>
       </div>
 
       <dl className="about-stats">
         <div className="about-stat">
-          <dt>Experience</dt>
-          <dd>1+ Yrs</dd>
+          <dt>Working since</dt>
+          <dd>2024</dd>
         </div>
         <div className="about-stat">
           <dt>Projects shipped</dt>
-          <dd>05</dd>
+          <dd>06</dd>
         </div>
         <div className="about-stat">
           <dt>Based in</dt>
-          <dd>Kerala, IN</dd>
+          <dd>Kannur, IN</dd>
         </div>
       </dl>
     </section>

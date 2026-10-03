@@ -109,7 +109,7 @@ const Landing = ({ children }: PropsWithChildren) => {
       <div className="landing-foot">
         <div>
           <p className="landing-stack">
-            React · Angular · Next.js · Node · NestJS
+            React · Next.js · TypeScript · Node · MongoDB
           </p>
           <p className="landing-blurb">
             I build <strong>production web applications</strong> end to end —
