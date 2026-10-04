@@ -30,10 +30,6 @@ jobs:
       # "/portfolio" for a project site.
       - id: pages
         uses: actions/configure-pages@v5
-        with:
-          # Turns Pages on for the repo via the workflow token, so the first
-          # deploy needs no visit to repository settings.
-          enablement: true
 
       - run: npm ci
 
