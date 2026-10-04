@@ -1,0 +1,36 @@
+name: Build
+
+# Runs on every push regardless of Pages, so a clean-machine build failure
+# surfaces here rather than only on a hosting provider.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # The site is useless if these are missing, and a bad base path makes
+      # them 404 silently rather than failing the build.
+      - name: Check the built output
+        run: |
+          set -e
+          test -f dist/index.html
+          test -f dist/Sayanth-V-Resume.pdf
+          for f in SERENITY LUXE ELEGANCE PORTFOLIO sayanth; do
+            test -f "dist/images/$f.webp"
+          done
+          grep -q 'assets/index-' dist/index.html
+          echo "Built output looks complete."
