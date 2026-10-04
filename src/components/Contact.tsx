@@ -1,4 +1,5 @@
 import { MdArrowOutward } from "react-icons/md";
+import asset from "./utils/asset";
 import "./styles/Contact.css";
 
 const socials = [
@@ -57,7 +58,7 @@ const Contact = () => {
         <div className="contact-box">
           <h4>Résumé</h4>
           <a
-            href="/Sayanth-V-Resume.pdf"
+            href={asset("/Sayanth-V-Resume.pdf")}
             target="_blank"
             rel="noreferrer"
             data-cursor="disable"

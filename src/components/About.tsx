@@ -1,3 +1,4 @@
+import asset from "./utils/asset";
 import "./styles/About.css";
 
 const About = () => {
@@ -8,7 +9,7 @@ const About = () => {
           <span className="label">01 — About</span>
           <figure className="about-photo">
             <img
-              src="/images/sayanth.webp"
+              src={asset("/images/sayanth.webp")}
               alt="Illustrated portrait of Sayanth V"
               width="1122"
               height="1402"

@@ -1,3 +1,4 @@
+import asset from "./utils/asset";
 import { useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -78,7 +79,7 @@ const Navbar = () => {
       </div>
 
       <div className="header">
-        <a href="/#" className="navbar-title" data-cursor="disable">
+        <a href={asset("/")} className="navbar-title" data-cursor="disable">
           SV
         </a>
         <a

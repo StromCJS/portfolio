@@ -1,3 +1,4 @@
+import asset from "./utils/asset";
 import { useEffect, useState } from "react";
 import Marquee from "react-fast-marquee";
 import "./styles/Loading.css";
@@ -41,7 +42,7 @@ const Loading = ({ percent }: { percent: number }) => {
   return (
     <>
       <div className="loading-header">
-        <a href="/#" className="loader-title" data-cursor="disable">
+        <a href={asset("/")} className="loader-title" data-cursor="disable">
           SV
         </a>
       </div>

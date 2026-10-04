@@ -3,6 +3,7 @@ import {
   FaInstagram,
   FaLinkedinIn,
 } from "react-icons/fa6";
+import asset from "./utils/asset";
 import "./styles/SocialIcons.css";
 import { TbNotes } from "react-icons/tb";
 import { useEffect } from "react";
@@ -76,7 +77,7 @@ const SocialIcons = () => {
       </div>
       <a
         className="resume-button"
-        href="/Sayanth-V-Resume.pdf"
+        href={asset("/Sayanth-V-Resume.pdf")}
         target="_blank"
         rel="noreferrer"
         data-cursor="disable"

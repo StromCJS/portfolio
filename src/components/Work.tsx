@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MdArrowOutward } from "react-icons/md";
+import asset from "./utils/asset";
 import "./styles/Work.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -138,7 +139,7 @@ const Work = () => {
 
               <div className="wp-media">
                 <img
-                  src={project.image}
+                  src={asset(project.image)}
                   alt={`${project.title} — ${project.category}`}
                   loading="lazy"
                 />
