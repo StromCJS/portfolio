@@ -1,0 +1,264 @@
+/* Anime toggle - include on a page with:
+     <link rel="stylesheet" href="anime-toggle.css">
+     <script src="anime-toggle.js" defer></script>
+   Image paths are relative to THIS file. Everything is prefixed "at-" so it can't clash
+   with the portfolio's own classes. Colours follow the portfolio's "acid monochrome" tokens. */
+
+.at-widget {
+  --at-surface: #111111;
+  --at-surface-2: #171717;
+  --at-line: rgba(255, 255, 255, 0.1);
+  --at-line-strong: rgba(255, 255, 255, 0.22);
+  --at-text: rgba(255, 255, 255, 0.92);
+  --at-text-2: #a3a3a3;
+  --at-acid: #ccff00;
+
+  position: fixed;
+  right: 1em;
+  bottom: 0;
+  z-index: 160;           /* above the portfolio's bottom bar (150), under its cursor and loader */
+  font: 15px/1.45 "Inter", system-ui, -apple-system, sans-serif;
+  color: var(--at-text);
+}
+.at-widget, .at-widget *, .at-widget *::before, .at-widget *::after,
+.at-reopen { box-sizing: border-box; }
+.at-widget.at-hidden { display: none; }   /* minimised */
+/* waiting for the page (data-start-after in anime-toggle.js), then fading in with it */
+.at-widget { transition: opacity 0.6s, visibility 0.6s; }
+.at-widget.at-waiting { opacity: 0; visibility: hidden; }
+
+/* ---------- Header bar ---------- */
+.at-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 8em;
+  min-height: 3.25em;
+}
+.at-widget.at-open .at-header {
+  width: 22em;
+  padding: 0.75em 0.75em 0.75em 1.25em;
+  border: 1px solid var(--at-line);
+  border-bottom: 0;
+  border-radius: 1em 1em 0 0;
+  background: var(--at-surface-2);
+}
+/* "between" = mid-close: hide the header while the panel collapses */
+.at-widget.at-between .at-header { visibility: hidden; }
+
+.at-title {
+  display: none;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.at-title::before {        /* small acid "online" dot */
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-right: 0.5em;
+  border-radius: 50%;
+  background: var(--at-acid);
+  vertical-align: 0.1em;
+}
+.at-widget.at-open .at-title { display: block; }
+
+/* ---------- The character ----------
+   .at-toggle is the hit area (about his body width); the picture is drawn on the full
+   canvas around it, so the empty space beside him doesn't catch clicks or drags.
+   .at-sprite plays the video clips: anime-toggle.js steps background-position through a
+   sprite sheet (see CLIPS there; sheets from make-clips.py). ::before shows a still pose
+   (make-images.py) until the sheets have loaded, and while he's being dragged. */
+.at-toggle {
+  position: absolute;
+  right: 0.25em;          /* keeps the arm-out pose's fist on screen */
+  bottom: 0;
+  width: 6.5em;
+  height: 14.53em;
+  cursor: grab;
+  touch-action: none;     /* let touch drags move him instead of scrolling */
+  user-select: none;
+  -webkit-user-select: none;
+  scale: -1 1;            /* on the right side he faces/points left, into the page */
+  transition: filter 0.25s;
+}
+.at-toggle::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 11.39em;         /* 486/620 of the height */
+  height: 100%;
+  margin-left: -5.695em;
+  background: url("images/wave.webp") no-repeat center bottom / contain;
+  pointer-events: none;
+}
+.at-widget.at-clips:not(.at-dragging) .at-toggle::before { content: none; }
+
+.at-sprite {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 12.03em;         /* the frame size make-clips.py prints (308x389) */
+  height: 15.19em;
+  margin-left: -6.015em;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.at-widget.at-dragging .at-sprite { visibility: hidden; }
+
+.at-toggle:hover,
+.at-toggle:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 0 0.9em rgba(204, 255, 0, 0.35));
+}
+
+.at-widget.at-open .at-toggle { display: none; }
+
+/* Dragged to the left half: face right (unmirrored), cloud on his other side */
+.at-widget.at-left .at-toggle { scale: 1 1; }
+
+/* Being dragged: stepping pose, facing the way he's moving ("step" faces right)... */
+.at-widget.at-dragging .at-toggle { cursor: grabbing; scale: -1 1; }
+.at-widget.at-dragging.at-dir-right .at-toggle { scale: 1 1; }
+.at-widget.at-dragging .at-toggle::before { background-image: url("images/step.webp"); }
+/* ...and bobbing along while the pointer is actually moving */
+.at-widget.at-walking .at-toggle { animation: at-walk 0.42s ease-in-out infinite; }
+
+@keyframes at-walk {
+  0%, 100% { translate: 0 0;       rotate: 0deg; }
+  25%      { translate: 0 -0.35em; rotate: -1.5deg; }
+  50%      { translate: 0 0;       rotate: 0deg; }
+  75%      { translate: 0 -0.35em; rotate: 1.5deg; }
+}
+
+/* ---------- Cloud message ----------
+   A thought cloud (SVG outline, so the puffs have one clean border) with the text on top.
+   Fixed 2:1 size so the cloud never stretches - keep messages short (about 55 characters). */
+.at-bubble {
+  position: absolute;
+  right: 8.25em;
+  bottom: 11.75em;        /* level with his head, above his outstretched hands */
+  width: 14.5em;
+  height: 7.25em;
+  display: grid;
+  place-items: center;
+  padding: 1em 1.75em 1.25em;
+  font-size: 0.9em;
+  line-height: 1.35;
+  text-align: center;
+  pointer-events: none;
+}
+.at-cloud {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.at-cloud path,
+.at-cloud circle {
+  fill: #1c1c1c;
+  stroke: var(--at-line-strong);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.at-bubble-text { position: relative; }
+.at-bubble strong { color: var(--at-acid); font-weight: 600; }
+
+.at-widget.at-open .at-bubble,
+.at-widget.at-dragging .at-bubble { visibility: hidden; }
+
+/* On the left half the cloud sits on his right, so its little trail points the other way */
+.at-widget.at-left .at-bubble { right: auto; left: 9.25em; }
+.at-widget.at-left .at-cloud { scale: -1 1; }
+
+/* ...but on narrow screens there's no room on his right (it runs into the half-body on the
+   portfolio's resume button), so there it floats up to the left of his head instead. */
+@media (max-width: 780px) {
+  .at-widget.at-left .at-bubble { left: -8em; bottom: 15.75em; }
+  .at-widget.at-left .at-cloud { scale: 1 1; }
+}
+
+/* ---------- Header buttons ---------- */
+.at-buttons { display: none; margin-left: auto; gap: 0.25em; }
+.at-widget.at-open .at-buttons { display: flex; }
+
+.at-icon-btn {
+  width: 2em;
+  height: 2em;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--at-text-2);
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, color 0.2s;
+}
+.at-icon-btn:hover,
+.at-icon-btn:focus-visible { background: rgba(255, 255, 255, 0.06); color: var(--at-acid); outline: none; }
+.at-widget.at-open .at-close { transform: rotate(180deg); }
+
+/* ---------- Panel ---------- */
+.at-panel {
+  width: 0;               /* closed: zero width so the widget is only as wide as the header */
+  height: 0;
+  overflow: hidden;
+  background: var(--at-surface);
+  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.at-widget.at-open .at-panel {
+  width: 22em;
+  height: 14.5em;
+  border: 1px solid var(--at-line);
+  border-top: 0;
+}
+.at-panel-body { padding: 1.25em; }
+.at-panel-body p { margin: 0 0 1em; color: var(--at-text-2); }
+.at-panel-body p strong { color: var(--at-text); font-weight: 600; }
+
+.at-links { display: grid; gap: 0.5em; margin: 0; padding: 0; list-style: none; }
+.at-links a {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.625em 0.875em;
+  border: 1px solid var(--at-line);
+  border-radius: 0.5em;
+  color: var(--at-text);
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.at-links a::after { content: "→"; color: var(--at-text-2); transition: color 0.2s, translate 0.2s; }
+.at-links a:hover,
+.at-links a:focus-visible { border-color: var(--at-acid); color: var(--at-acid); outline: none; }
+.at-links a:hover::after,
+.at-links a:focus-visible::after { color: var(--at-acid); translate: 0.2em 0; }
+
+/* ---------- Minimise tab ---------- */
+.at-reopen {
+  position: fixed;
+  right: 8em;
+  bottom: 0;
+  z-index: 160;
+  padding: 0.375em 1em;
+  border: 1px solid var(--at-line-strong);
+  border-bottom: 0;
+  border-radius: 0.625em 0.625em 0 0;
+  background: #171717;
+  color: #ccff00;
+  font: 600 14px "Inter", system-ui, sans-serif;
+  cursor: pointer;
+  transform: translateY(calc(100% + 4px)); /* +4px: no sliver peeking on high-DPI screens */
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.at-reopen.at-show { transform: translateY(0); }
+
+@media (max-width: 576px) {
+  .at-widget { font-size: 13px; }
+  .at-widget.at-open { left: 0; right: 0 !important; } /* beat the dragged inline position */
+  .at-widget.at-open .at-header,
+  .at-widget.at-open .at-panel { width: 100%; border-radius: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .at-widget.at-walking .at-toggle { animation: none; }
+}

@@ -1,0 +1,93 @@
+/* Half-body anime on top of the resume button - see anime-bust.js.
+   Everything is prefixed "ab-" so it can't clash with the portfolio's own classes. */
+
+.ab-bust {
+  --ab-height: 136px;     /* how tall he is - the width follows (frames are 322x330) */
+  --ab-acid: #ccff00;
+  --ab-line: rgba(255, 255, 255, 0.22);
+
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 151;           /* just above the portfolio's icon bar (z-index 150) */
+  width: calc(var(--ab-height) * 322 / 330);
+  height: var(--ab-height);
+  font: 11.5px/1.35 "Inter", system-ui, -apple-system, sans-serif;
+  color: rgba(255, 255, 255, 0.92);
+  pointer-events: none;
+  visibility: hidden;     /* until the target is on the page and the frames have loaded */
+}
+.ab-bust.ab-show { visibility: visible; }
+
+/* The window he rises up through - its bottom edge is the top of the resume button, so
+   it looks like he's standing behind it. */
+.ab-window {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: filter 0.25s;
+  /* he's wider than the button, so fade out the flat cut at his waist instead of
+     showing a hard edge in mid-air beside it */
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent);
+}
+.ab-window:hover { filter: drop-shadow(0 0 10px rgba(204, 255, 0, 0.35)); }
+
+.ab-figure {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.ab-bust.ab-show .ab-figure { animation: ab-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes ab-rise { from { transform: translateY(100%); } }
+
+/* ---------- Cloud message, beside his head ---------- */
+.ab-cloud {
+  position: absolute;
+  right: 80%;
+  bottom: 68%;
+  width: 11.5em;
+  height: 5.75em;
+  display: grid;
+  place-items: center;
+  padding: 0.75em 1.25em 0.9em;
+  text-align: center;
+}
+.ab-cloud svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.ab-cloud path,
+.ab-cloud circle {
+  fill: #1c1c1c;
+  stroke: var(--ab-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.ab-cloud-text { position: relative; }
+.ab-cloud strong { color: var(--ab-acid); font-weight: 600; }
+.ab-bust.ab-show .ab-cloud { animation: ab-cloud-in 0.4s 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes ab-cloud-in { from { opacity: 0; transform: translateY(0.4em) scale(0.9); } }
+
+/* Target on the left half of the screen: cloud on his other side, trail pointing at him */
+.ab-bust.ab-left .ab-cloud { right: auto; left: 80%; }
+.ab-bust.ab-left .ab-cloud svg { scale: -1 1; }
+
+@media (max-width: 600px) {
+  .ab-bust { --ab-height: 104px; font-size: 11px; }
+}
+/* Phones: no room beside him (the full-body toggle stands there), so the cloud goes above
+   his head */
+@media (max-width: 480px) {
+  .ab-bust .ab-cloud,
+  .ab-bust.ab-left .ab-cloud { left: auto; right: -8%; bottom: 96%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ab-bust.ab-show .ab-figure,
+  .ab-bust.ab-show .ab-cloud { animation: none; }
+}
