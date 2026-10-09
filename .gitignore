@@ -31,3 +31,7 @@ backup/
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+
+# Source art and the cut-out scripts for the anime characters. Only the
+# generated sprite sheets the site loads are tracked, in public/anime/.
+my anime style/
